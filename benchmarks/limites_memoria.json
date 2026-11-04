@@ -1,0 +1,9 @@
+{
+  "descripcion": "Pico de tracemalloc en MiB. Límite = medido x 1.3. Regenerar con: python scripts/medir_memoria.py --actualizar",
+  "limites_mib": {
+    "construir_indice_invertido": 19.0,
+    "recomendar_100_consultas_con_cache": 45.1,
+    "leer_archivo_streaming_lotes": 16.1,
+    "procesar_archivo_por_lotes": 58.6
+  }
+}

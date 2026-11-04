@@ -1,0 +1,4 @@
+# Finales de línea LF en el repo: los lock files y scripts dan igual en Windows y en el CI (Linux).
+* text=auto eol=lf
+*.prof binary
+*.svg text eol=lf

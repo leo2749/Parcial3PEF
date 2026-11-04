@@ -1,0 +1,50 @@
+Dataset: 15000 usuarios, 3000 items, ~15 items/usuario
+
+[Baseline]              80 consultas -> 0.9784 s (12.23 ms/consulta)
+[Optimizado 1ra pasada] 80 consultas -> 0.2092 s (2.61 ms/consulta)  -> speedup vs baseline: 4.7x
+[Verificación]          resultados idénticos al baseline: True
+[Con caching]           80 consultas -> 0.0001 s (0.00 ms/consulta)  -> speedup vs 1ra pasada: 4166.9x
+
+[Invalidación] Tras actualizar al usuario 0 se recalcula en 2.36 ms (no se devuelve la versión cacheada).
+
+[Batch secuencial]     300 usuarios -> 0.9040 s
+[Batch concurrente]    300 usuarios, 4 procesos -> 0.9535 s -> speedup: 0.9x  (6 núcleos lógicos)
+
+--- Perfilado (cProfile) de BASELINE: top funciones por tiempo acumulado ---
+         2617825 function calls in 1.649 seconds
+
+   Ordered by: cumulative time
+   List reduced from 15 to 6 due to restriction <6>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    1.649    1.649 C:\Users\Leonel\Desktop\parcial_opcion2\benchmark.py:103(<lambda>)
+        1    0.032    0.032    1.649    1.649 C:\Users\Leonel\Desktop\parcial_opcion2\benchmark.py:39(consultar)
+       80    0.400    0.005    1.617    0.020 C:\Users\Leonel\Desktop\parcial_opcion2\recommender\naive.py:24(recomendar)
+  1199920    0.920    0.000    1.074    0.000 C:\Users\Leonel\Desktop\parcial_opcion2\recommender\similitud.py:18(puntaje_similitud)
+  1375018    0.154    0.000    0.154    0.000 {built-in method builtins.len}
+      160    0.119    0.001    0.119    0.001 {method 'sort' of 'list' objects}
+
+
+
+--- Perfilado (cProfile) de OPTIMIZADO: top funciones por tiempo acumulado ---
+         1199965 function calls in 0.642 seconds
+
+   Ordered by: cumulative time
+   List reduced from 25 to 6 due to restriction <6>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.011    0.011    0.642    0.642 C:\Users\Leonel\Desktop\parcial_opcion2\benchmark.py:104(<lambda>)
+        1    0.002    0.002    0.406    0.406 C:\Users\Leonel\Desktop\parcial_opcion2\benchmark.py:39(consultar)
+       80    0.034    0.000    0.404    0.005 C:\Users\Leonel\Desktop\parcial_opcion2\recommender\optimizado.py:108(recomendar)
+    87509    0.104    0.000    0.276    0.000 C:\Users\Leonel\Desktop\parcial_opcion2\recommender\optimizado.py:82(similitud)
+        1    0.118    0.118    0.224    0.224 C:\Users\Leonel\Desktop\parcial_opcion2\recommender\optimizado.py:47(__init__)
+    87307    0.121    0.000    0.150    0.000 C:\Users\Leonel\Desktop\parcial_opcion2\recommender\similitud.py:18(puntaje_similitud)
+
+
+
+=== Tabla comparativa (tiempos totales) ===
+Implementación inicial (baseline)                                978.41 ms
+Estructura + algoritmo optimizado (1ra pasada, sin cache aún)     209.18 ms
+Con caching (2da consulta, mismos usuarios)                        0.05 ms
+Batch secuencial (300 usuarios)                                  904.03 ms
+Batch concurrente, 4 procesos (300 usuarios)                     953.53 ms

@@ -1,0 +1,246 @@
+# Pipeline de Integración Continua.
+#
+# Todos los controles se ejecutan con `python ci.py <etapa>`, el mismo comando
+# que se usa en local (ver docs/calidad/controles.md). Este archivo solo
+# organiza las etapas, instala las herramientas y publica los reportes.
+#
+#   1 Integración ─▶ 2 Preparación ─┬▶ 3 Estático ──┐
+#                                   └▶ 3 Seguridad ─┼▶ 4 Pruebas (3.11, 3.13) ─▶ 6 Rendimiento ─┐
+#                                                   ├▶ 5 Dependencias ─────────────────────────┼▶ 7 Resultado
+#                                                   └▶ 5 Documentación ────────────────────────┘
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Un push nuevo a la misma rama cancela la corrida anterior.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.13"
+  GITLEAKS_VERSION: "8.30.1"
+  LYCHEE_VERSION: "0.24.2"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PYTHONUTF8: "1"
+
+jobs:
+  # ------------------------------------------------------------------ 2
+  preparacion:
+    name: "2 · Preparación del entorno"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - name: Instalar dependencias fijadas
+        run: python -m pip install -r requirements-dev.txt
+      - name: Verificar que no haya dependencias rotas
+        run: python -m pip check
+      - name: Verificar que los lock files estén sincronizados con requirements/*.in
+        run: |
+          python ci.py lock
+          git diff --exit-code requirements.txt requirements-dev.txt \
+            || { echo "::error::requirements*.txt desactualizados: correr 'python ci.py lock' y commitear"; exit 1; }
+
+  # ------------------------------------------------------------------ 3
+  estatico:
+    name: "3 · Calidad estática"
+    needs: preparacion
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: python -m pip install -r requirements-dev.txt
+      - name: Ruff · mypy · pylint · Radon/Xenon · Lizard
+        run: python ci.py estatico
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reportes-estatico
+          path: reportes/
+
+  seguridad:
+    name: "3 · Seguridad del código y secretos"
+    needs: preparacion
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      security-events: write   # para subir SARIF a la pestaña Security
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0       # gitleaks revisa todo el historial, no solo el último commit
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: python -m pip install -r requirements-dev.txt
+      - name: Instalar gitleaks ${{ env.GITLEAKS_VERSION }}
+        run: |
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | sudo tar -xz -C /usr/local/bin gitleaks
+          gitleaks version
+      - name: Bandit · gitleaks
+        run: python ci.py seguridad --estricto
+      # La pestaña Security requiere repositorio público o GitHub Advanced Security;
+      # si no está disponible, el reporte igual queda en los artefactos.
+      - name: Publicar SARIF de Bandit
+        if: always() && hashFiles('reportes/bandit.sarif') != ''
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: reportes/bandit.sarif
+          category: bandit
+      - name: Publicar SARIF de gitleaks
+        if: always() && hashFiles('reportes/gitleaks.sarif') != ''
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: reportes/gitleaks.sarif
+          category: gitleaks
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reportes-seguridad
+          path: reportes/
+
+  # ------------------------------------------------------------------ 4
+  pruebas:
+    name: "4 · Pruebas y cobertura (Python ${{ matrix.python }})"
+    needs: [estatico, seguridad]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: python -m pip install -r requirements-dev.txt
+      - name: pytest + coverage (umbral 90 %)
+        run: python ci.py pruebas
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reportes-pruebas-py${{ matrix.python }}
+          path: reportes/
+
+  # ------------------------------------------------------------------ 5
+  dependencias:
+    name: "5 · Seguridad de dependencias"
+    needs: [estatico, seguridad]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: python -m pip install -r requirements-dev.txt
+      - name: pip check · pip-audit
+        run: python ci.py dependencias
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reportes-dependencias
+          path: reportes/
+
+  documentacion:
+    name: "5 · Documentación"
+    needs: [estatico, seguridad]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: python -m pip install -r requirements-dev.txt
+      - name: Instalar lychee ${{ env.LYCHEE_VERSION }}
+        run: |
+          curl -sSfL "https://github.com/lycheeverse/lychee/releases/download/lychee-v${LYCHEE_VERSION}/lychee-x86_64-unknown-linux-gnu.tar.gz" \
+            | sudo tar -xz -C /usr/local/bin lychee
+          lychee --version
+      - name: MkDocs (--strict) · markdownlint · lychee
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # evita el rate limit de GitHub en lychee
+        run: python ci.py docs --estricto
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reportes-documentacion
+          path: |
+            reportes/
+            site/
+
+  # ------------------------------------------------------------------ 6
+  rendimiento:
+    name: "6 · Rendimiento y memoria"
+    needs: pruebas
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: python -m pip install -r requirements-dev.txt
+      - name: Benchmark · profiling · memoria
+        run: python ci.py rendimiento
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reportes-rendimiento
+          path: reportes/
+
+  # ------------------------------------------------------------------ 7
+  resultado:
+    name: "7 · Resultado final"
+    if: always()
+    needs: [preparacion, estatico, seguridad, pruebas, dependencias, documentacion, rendimiento]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Aprobar o rechazar
+        env:
+          RESULTADOS: ${{ toJSON(needs) }}
+        run: |
+          echo "## Resultado del pipeline" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Job | Resultado |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "$RESULTADOS" | jq -r 'to_entries[] | "| \(.key) | \(.value.result) |"' >> "$GITHUB_STEP_SUMMARY"
+          if echo "$RESULTADOS" | jq -e 'any(.[]; .result != "success")' > /dev/null; then
+            echo "**RECHAZADO**: al menos un control falló (ver artefactos reportes-*)." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          echo "**APROBADO**" >> "$GITHUB_STEP_SUMMARY"

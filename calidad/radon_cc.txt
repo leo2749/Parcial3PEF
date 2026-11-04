@@ -1,0 +1,72 @@
+recommender\archivos.py
+    F 121:0 leer_historial_por_lotes - A (5)
+    F 191:0 _procesar_rango - A (5)
+    F 213:0 combinar_perfiles - A (4)
+    F 232:0 procesar_archivo_paralelo - A (4)
+    F 31:0 _parsear_linea - A (3)
+    F 65:0 escribir_historial - A (3)
+    F 102:0 leer_historial_ingenuo - A (3)
+    F 150:0 procesar_archivo_por_lotes - A (3)
+    F 170:0 dividir_en_rangos - A (3)
+    F 50:0 escribir_historial_ingenuo - A (2)
+recommender\concurrente.py
+    F 25:0 _tarea - A (2)
+    F 32:0 recomendar_batch_concurrente - A (2)
+    F 54:0 recomendar_batch_secuencial - A (2)
+    F 19:0 _inicializar_worker - A (1)
+recommender\data_gen.py
+    F 11:0 generar_dataset - A (2)
+    F 30:0 generar_eventos - A (2)
+recommender\historial.py
+    F 33:0 procesar_historial - A (2)
+    F 55:0 aplicar_preferencias - A (2)
+    F 81:0 cargar_usuarios_desde_archivo - A (2)
+    F 17:0 registrar_usuario - A (1)
+    F 70:0 cargar_usuarios_desde_historial - A (1)
+recommender\naive.py
+    C 13:0 RecomendadorNaive - A (4)
+    M 23:4 RecomendadorNaive.recomendar - A (4)
+    M 20:4 RecomendadorNaive.__init__ - A (1)
+recommender\optimizado.py
+    M 81:4 RecomendadorOptimizado.similitud - A (5)
+    C 38:0 RecomendadorOptimizado - A (4)
+    M 107:4 RecomendadorOptimizado.recomendar - A (4)
+    M 46:4 RecomendadorOptimizado.__init__ - A (3)
+    M 61:4 RecomendadorOptimizado.actualizar_usuario - A (3)
+    M 100:4 RecomendadorOptimizado._candidatos - A (2)
+recommender\similitud.py
+    F 58:0 top_items - B (6)
+    F 18:0 puntaje_similitud - A (4)
+    F 45:0 clave_vecino - A (1)
+api.py
+    F 81:0 crear_app - A (3)
+    F 57:0 resolver_ruta_segura - A (2)
+    C 29:0 Usuario - A (1)
+    C 35:0 Evento - A (1)
+    C 41:0 Archivo - A (1)
+    C 47:0 Recomendacion - A (1)
+cli.py
+    F 51:0 opcion_cargar_historial - B (7)
+    F 33:0 opcion_registrar_usuario - B (6)
+    F 74:0 opcion_similitud - A (4)
+    F 88:0 opcion_recomendar - A (4)
+    F 148:0 main - A (4)
+    F 23:0 pedir_entero - A (3)
+    F 105:0 opcion_listar_usuarios - A (3)
+    F 114:0 opcion_cargar_archivo - A (2)
+demo.py
+    F 17:0 main - A (2)
+benchmark.py
+    F 60:0 main - A (3)
+    F 42:0 consultar - A (2)
+    F 35:0 medir - A (1)
+    F 47:0 perfilar - A (1)
+benchmark_archivos.py
+    F 73:0 imprimir_resultados - A (4)
+    F 53:0 medir_estrategias - A (2)
+    F 93:0 main - A (2)
+    F 33:0 medir - A (1)
+    F 40:0 pico_memoria - A (1)
+
+57 blocks (classes, functions, methods) analyzed.
+Average complexity: A (2.736842105263158)

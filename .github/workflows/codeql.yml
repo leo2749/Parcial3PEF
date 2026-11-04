@@ -1,0 +1,30 @@
+# Análisis semántico de seguridad con CodeQL (complementa a Bandit).
+# Gratis en repositorios públicos; en privados requiere GitHub Advanced Security.
+# Política: las alertas "high"/"critical" se revisan antes de integrar (docs/seguridad.md).
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "17 6 * * 1"   # lunes 06:17 UTC: detecta vulnerabilidades nuevas en código sin cambios
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: github/codeql-action/init@v4
+        with:
+          languages: python
+          queries: security-extended
+      - uses: github/codeql-action/analyze@v4
+        with:
+          category: codeql-python

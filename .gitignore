@@ -1,0 +1,21 @@
+# Entornos y cachés
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.benchmarks/
+.coverage
+.coverage.*
+node_modules/
+
+# Salidas generadas por los controles (se publican como artefactos del CI)
+reportes/
+site/
+docs/_build/
+
+# Datos de la API (solo se versiona el LEEME)
+datos/*
+!datos/LEEME.txt

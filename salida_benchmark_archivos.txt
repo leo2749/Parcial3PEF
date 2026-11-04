@@ -1,0 +1,15 @@
+Eventos: 2,000,000 · usuarios: 50,000 · ítems: 5,000 · núcleos: 6
+
+Tamaño del archivo: 20.1 MiB
+Mismos perfiles en las 3 lecturas: True
+
+Estrategia                                           Tiempo (s)  Pico mem (MiB)
+Escritura ingenua (línea a línea, flush)                 10.683               -
+Escritura por lotes + buffer 1 MiB                        2.058               -
+Lectura ingenua (readlines, todo a memoria)               1.920           276.9
+Lectura por lotes (generador, streaming)                  2.187           172.1
+Lectura en paralelo (6 procesos)                          1.264               -
+Solo recorrer los lotes (sin armar perfiles)                  -            12.4
+
+Speedup escritura por lotes vs. ingenua: 5.2x
+Speedup lectura en paralelo vs. por lotes: 1.7x

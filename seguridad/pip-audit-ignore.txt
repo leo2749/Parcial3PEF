@@ -1,0 +1,5 @@
+# Excepciones de pip-audit (una por línea: ID  # justificación, fecha, responsable).
+# Toda excepción debe estar también explicada en docs/seguridad.md
+# y revisarse en cada actualización de dependencias.
+# Ejemplo:
+# GHSA-xxxx-xxxx-xxxx  # solo afecta a Windows Server; el CI y producción usan Linux. 2026-11-04

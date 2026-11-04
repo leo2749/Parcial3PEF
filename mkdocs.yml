@@ -1,0 +1,107 @@
+# Documentación del proyecto (MkDocs + Material for MkDocs).
+#   Local:      python -m mkdocs serve          -> http://127.0.0.1:8000
+#   Verificar:  python -m mkdocs build --strict (lo corre el CI)
+#   Publicada:  GitHub Pages, por .github/workflows/docs.yml
+site_name: Motor de recomendaciones
+site_description: Documentación funcional, técnica y operativa del motor de recomendaciones eficiente
+site_author: Equipo de Programación Eficiente
+# Completar al crear el repositorio en GitHub:
+# site_url: https://<usuario>.github.io/<repositorio>/
+# repo_url: https://github.com/<usuario>/<repositorio>
+copyright: Programación Eficiente · Opción 2
+
+docs_dir: docs
+# docs/ también contiene la documentación Sphinx del segundo parcial (se conserva aparte).
+exclude_docs: |
+  _build/
+  _static/
+  *.rst
+  conf.py
+
+theme:
+  name: material
+  language: es
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Modo oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Modo claro
+
+plugins:
+  - search:
+      lang: es
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: ["."]
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            heading_level: 3
+            members_order: source
+            show_signature_annotations: true
+            separate_signature: true
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+nav:
+  - Inicio: index.md
+  - 1. Descripción funcional: funcional.md
+  - 2. Arquitectura: arquitectura.md
+  - 3. Instalación y ejecución: instalacion.md
+  - 4. Diseño técnico: diseno.md
+  - 5. API y contratos:
+      - api.md
+      - Referencia del código: referencia.md
+  - 6. Pruebas: pruebas.md
+  - 7. Rendimiento: rendimiento.md
+  - 8. Seguridad: seguridad.md
+  - 9. Mantenimiento: mantenimiento.md
+  - Calidad y CI:
+      - Matriz de controles: calidad/controles.md
+      - Diseño del pipeline: calidad/pipeline.md
+      - Herramienta de documentación: calidad/documentacion.md

@@ -1,0 +1,2 @@
+Directorio de datos de la API: POST /historial/archivo solo puede leer CSV ubicados acá.
+Se cambia con la variable de entorno MOTOR_DIR_DATOS.

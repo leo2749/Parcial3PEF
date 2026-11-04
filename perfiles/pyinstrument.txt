@@ -1,0 +1,33 @@
+
+  _     ._   __/__   _ _  _  _ _/_   Recorded: 09:27:42  Samples:  2473
+ /_//_/// /_\ / //_// / //_'/ //     Duration: 2.597     CPU time: 2.594
+/   _/                      v5.1.3
+
+Program: perfilar.py
+
+2.594 <module>  perfilar.py:1
+└─ 2.565 main  perfilar.py:32
+   ├─ 1.612 correr_baseline  perfilar.py:18
+   │  └─ 1.611 RecomendadorNaive.recomendar  recommender\naive.py:24
+   │     ├─ 1.054 puntaje_similitud  recommender\similitud.py:18
+   │     │  ├─ 0.895 [self]  recommender\similitud.py
+   │     │  └─ 0.159 len  <built-in>
+   │     ├─ 0.405 [self]  recommender\naive.py
+   │     └─ 0.149 list.sort  <built-in>
+   ├─ 0.577 correr_optimizado  perfilar.py:25
+   │  ├─ 0.380 RecomendadorOptimizado.recomendar  recommender\optimizado.py:108
+   │  │  ├─ 0.270 RecomendadorOptimizado.similitud  recommender\optimizado.py:82
+   │  │  │  ├─ 0.139 puntaje_similitud  recommender\similitud.py:18
+   │  │  │  └─ 0.109 [self]  recommender\optimizado.py
+   │  │  └─ 0.059 nlargest  heapq.py:523
+   │  └─ 0.193 RecomendadorOptimizado.__init__  recommender\optimizado.py:47
+   │     ├─ 0.097 [self]  recommender\optimizado.py
+   │     ├─ 0.052 set.add  <built-in>
+   │     └─ 0.044 dict.setdefault  <built-in>
+   └─ 0.364 generar_dataset  recommender\data_gen.py:11
+      └─ 0.342 Random.sample  random.py:363
+            [6 frames hidden]  random, <built-in>
+
+To view this report with different options, run:
+    pyinstrument --load-prev 2026-10-14T09-27-42 [options]
+

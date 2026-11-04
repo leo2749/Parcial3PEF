@@ -1,0 +1,5 @@
+# Dependencias de ejecución (top-level). El motor usa solo la librería estándar;
+# esto es para la API REST.
+# Se compilan a requirements.txt con versiones exactas:  python ci.py lock
+fastapi>=0.115
+uvicorn>=0.30

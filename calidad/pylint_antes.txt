@@ -1,0 +1,63 @@
+************* Module recommender.concurrente
+recommender\concurrente.py:11:0: C0103: Constant name "_recomendador_global" doesn't conform to UPPER_CASE naming style (invalid-name)
+recommender\concurrente.py:15:4: W0603: Using the global statement (global-statement)
+recommender\concurrente.py:24:0: C0116: Missing function or method docstring (missing-function-docstring)
+recommender\concurrente.py:38:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module recommender.data_gen
+recommender\data_gen.py:8:0: C0303: Trailing whitespace (trailing-whitespace)
+recommender\data_gen.py:7:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module recommender.historial
+recommender\historial.py:17:0: C0301: Line too long (102/100) (line-too-long)
+************* Module recommender.naive
+recommender\naive.py:5:0: C0303: Trailing whitespace (trailing-whitespace)
+recommender\naive.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+recommender\naive.py:4:0: C0116: Missing function or method docstring (missing-function-docstring)
+recommender\naive.py:15:0: C0115: Missing class docstring (missing-class-docstring)
+recommender\naive.py:19:4: C0116: Missing function or method docstring (missing-function-docstring)
+recommender\naive.py:15:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module recommender.optimizado
+recommender\optimizado.py:59:58: C0303: Trailing whitespace (trailing-whitespace)
+recommender\optimizado.py:60:63: C0303: Trailing whitespace (trailing-whitespace)
+recommender\optimizado.py:61:0: C0303: Trailing whitespace (trailing-whitespace)
+recommender\optimizado.py:48:0: C0115: Missing class docstring (missing-class-docstring)
+recommender\optimizado.py:63:4: C0116: Missing function or method docstring (missing-function-docstring)
+recommender\optimizado.py:93:4: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module cli
+cli.py:16:0: C0116: Missing function or method docstring (missing-function-docstring)
+cli.py:25:0: C0116: Missing function or method docstring (missing-function-docstring)
+cli.py:42:0: C0116: Missing function or method docstring (missing-function-docstring)
+cli.py:64:0: C0116: Missing function or method docstring (missing-function-docstring)
+cli.py:77:0: C0116: Missing function or method docstring (missing-function-docstring)
+cli.py:93:0: C0116: Missing function or method docstring (missing-function-docstring)
+cli.py:112:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module demo
+demo.py:18:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module benchmark
+benchmark.py:50:0: C0301: Line too long (101/100) (line-too-long)
+benchmark.py:17:0: C0116: Missing function or method docstring (missing-function-docstring)
+benchmark.py:24:0: C0116: Missing function or method docstring (missing-function-docstring)
+benchmark.py:24:0: R0914: Too many local variables (29/15) (too-many-locals)
+benchmark.py:25:4: C0103: Variable name "N_USUARIOS" doesn't conform to snake_case naming style (invalid-name)
+benchmark.py:26:4: C0103: Variable name "N_ITEMS" doesn't conform to snake_case naming style (invalid-name)
+benchmark.py:27:4: C0103: Variable name "ITEMS_POR_USUARIO" doesn't conform to snake_case naming style (invalid-name)
+benchmark.py:28:4: C0103: Variable name "N_CONSULTAS" doesn't conform to snake_case naming style (invalid-name)
+benchmark.py:29:4: C0103: Variable name "TOP_N" doesn't conform to snake_case naming style (invalid-name)
+benchmark.py:30:4: C0103: Variable name "K_VECINOS" doesn't conform to snake_case naming style (invalid-name)
+benchmark.py:64:16: W0212: Access to a protected member _cache_recs of a client class (protected-access)
+benchmark.py:66:10: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+benchmark.py:24:0: R0915: Too many statements (54/50) (too-many-statements)
+benchmark.py:64:4: W0612: Unused variable 'rec_antes' (unused-variable)
+benchmark.py:65:4: W0612: Unused variable 'rec_despues' (unused-variable)
+benchmark.py:1:0: R0801: Similar lines in 2 files
+==recommender.naive:[33:39]
+==recommender.optimizado:[110:116]
+            if sim <= 0:
+                continue
+            for item in self.usuarios[vecino_id]:
+                if item not in objetivo:
+                    puntajes[item] = puntajes.get(item, 0.0) + sim
+ (duplicate-code)
+
+-----------------------------------
+Your code has been rated at 8.68/10
+

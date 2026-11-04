@@ -1,0 +1,21 @@
+# Configuración de gitleaks (detección de secretos).
+# Extiende las reglas por defecto y excluye solo archivos generados o de terceros.
+# Política: cualquier hallazgo bloquea el pipeline. Un falso positivo se
+# documenta en docs/seguridad.md y se excluye acá con su justificación.
+title = "gitleaks - motor de recomendaciones"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Entornos virtuales, builds y reportes generados (no son código del equipo)"
+paths = [
+  '''(^|[\/])\.venv[\/]''',
+  '''(^|[\/])venv[\/]''',
+  '''(^|[\/])site[\/]''',
+  '''(^|[\/])reportes[\/]''',
+  '''(^|[\/])docs[\/]_build[\/]''',
+  '''(^|[\/])perfiles[\/]''',
+  '''(^|[\/])\.git[\/]''',
+  '''\.prof$''',
+]

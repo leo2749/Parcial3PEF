@@ -1,0 +1,12 @@
+{
+  "descripcion": "Medianas normalizadas por test_calibracion. Regenerar con: python scripts/comparar_benchmark.py --actualizar",
+  "valores": {
+    "test_recomendar_baseline": 8.57575402773422,
+    "test_construir_indice_invertido": 2.514170218219757,
+    "test_recomendar_optimizado_sin_cache": 1.2745468808129339,
+    "test_recomendar_optimizado_con_cache": 0.01606992320156637,
+    "test_puntaje_similitud": 0.06447581021524414,
+    "test_procesar_historial_en_memoria": 1.5256211361988847,
+    "test_leer_archivo_por_lotes": 5.270220588262797
+  }
+}

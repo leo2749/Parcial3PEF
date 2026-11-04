@@ -1,0 +1,21 @@
+# markdownlint-cli2: estilo de la documentación Markdown.
+# Ejecutar:  npx --yes markdownlint-cli2@0.23.3   (o: python ci.py docs)
+globs:
+  - "README.md"
+  - "docs/**/*.md"
+ignores:
+  - ".venv/**"
+  - "site/**"
+  - "docs/_build/**"
+config:
+  default: true
+  MD013:            # largo de línea: tablas y bloques de código pueden ser largos
+    line_length: 120
+    tables: false
+    code_blocks: false
+  MD033:            # HTML embebido: lo usan algunos componentes de Material
+    allowed_elements: ["br", "details", "summary", "div", "span"]
+  MD024:            # títulos repetidos: permitidos en secciones distintas
+    siblings_only: true
+  MD060: false     # espaciado de los separadores de tabla (|---|): cosmético
+  MD046: false     # las pestañas de Material (=== "...") usan bloques indentados

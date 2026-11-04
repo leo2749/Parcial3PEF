@@ -1,0 +1,72 @@
+[project]
+name = "motor-recomendaciones"
+version = "2.0.0"
+description = "Motor de recomendaciones eficiente (Programación Eficiente, opción 2)"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "recommender"]
+pythonpath = ["."]
+addopts = "-q --doctest-modules"
+
+[tool.coverage.run]
+source = ["recommender", "api"]
+# Rutas relativas en coverage.xml, para que SonarQube (en Docker/Linux) las encuentre.
+relative_files = true
+
+[tool.coverage.report]
+# Umbral mínimo de cobertura: el CI rechaza por debajo de este valor.
+fail_under = 90
+show_missing = true
+skip_covered = false
+
+[tool.pylint."messages control"]
+# Las clases recomendador tienen a propósito una sola operación pública.
+disable = ["too-few-public-methods"]
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.pylint.design]
+max-args = 6
+max-positional-arguments = 6
+max-locals = 20
+
+# --------------------------------------------------------------------------
+# Controles de calidad del CI (ver docs/calidad/controles.md)
+# --------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["docs/_build", "site", "reportes"]
+
+[tool.ruff.lint]
+# E/W: pycodestyle · F: pyflakes · I: imports · B: bugbear · UP: pyupgrade
+# SIM: simplificaciones · C4: comprehensions · N: nombres · S: seguridad (Bandit)
+# PL: reglas de pylint · RUF: reglas propias de Ruff
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "C4", "N", "S", "PL", "RUF"]
+
+# Símbolos matemáticos usados a propósito en los docstrings de Jaccard.
+allowed-confusables = ["∪", "∩"]
+
+[tool.ruff.lint.per-file-ignores]
+# En los tests y benchmarks, assert y los valores literales son lo esperado.
+"tests/**" = ["S101", "PLR2004"]
+"benchmarks/**" = ["S101", "PLR2004"]
+
+[tool.mypy]
+# Política: modo estricto para el código de producción y las herramientas.
+# Los tests no se tipan (fixtures de pytest); ver docs/calidad/controles.md.
+files = ["recommender", "api.py", "cli.py", "demo.py", "benchmark.py",
+         "benchmark_archivos.py", "perfilar.py", "ci.py", "scripts"]
+python_version = "3.11"
+strict = true
+warn_unreachable = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = ["pytest_benchmark.*"]
+ignore_missing_imports = true
+
+[tool.bandit]
+exclude_dirs = ["tests", "benchmarks", ".venv", "venv", "site", "docs"]

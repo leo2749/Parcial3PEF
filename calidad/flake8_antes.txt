@@ -1,0 +1,15 @@
+benchmark.py:50:101: E501 line too long (101 > 100 characters)
+benchmark.py:60:57: E231 missing whitespace after ','
+benchmark.py:64:5: F841 local variable 'rec_antes' is assigned to but never used
+benchmark.py:65:5: F841 local variable 'rec_despues' is assigned to but never used
+benchmark.py:66:11: F541 f-string is missing placeholders
+recommender\concurrente.py:25:35: E127 continuation line over-indented for visual indent
+recommender\concurrente.py:26:35: E127 continuation line over-indented for visual indent
+recommender\concurrente.py:39:34: E127 continuation line over-indented for visual indent
+recommender\data_gen.py:8:1: W293 blank line contains whitespace
+recommender\historial.py:17:101: E501 line too long (102 > 100 characters)
+recommender\historial.py:48:38: E127 continuation line over-indented for visual indent
+recommender\naive.py:5:1: W293 blank line contains whitespace
+recommender\optimizado.py:59:59: W291 trailing whitespace
+recommender\optimizado.py:60:64: W291 trailing whitespace
+recommender\optimizado.py:61:1: W293 blank line contains whitespace
