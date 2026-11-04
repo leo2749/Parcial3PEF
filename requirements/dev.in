@@ -1,7 +1,7 @@
 # Herramientas de desarrollo, calidad y CI (top-level).
 # Se compilan a requirements-dev.txt con versiones exactas:  python ci.py lock
 -c ../requirements.txt
-uv==0.13.5               # regenera los lock files (python ci.py lock)
+uv==0.13.6               # regenera los lock files (python ci.py lock)
 fastapi>=0.115
 uvicorn>=0.30
 httpx>=0.27              # lo usa fastapi.testclient
