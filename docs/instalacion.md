@@ -18,8 +18,8 @@ CI siempre las instala y corre en modo `--estricto`.
 === "Windows (PowerShell)"
 
     ```powershell
-    git clone https://github.com/<usuario>/<repositorio>.git
-    cd <repositorio>
+    git clone https://github.com/leo2749/Parcial3PEF.git
+    cd Parcial3PEF
     python -m venv .venv
     .venv\Scripts\Activate.ps1
     python -m pip install -r requirements-dev.txt
@@ -28,8 +28,8 @@ CI siempre las instala y corre en modo `--estricto`.
 === "Linux / macOS"
 
     ```bash
-    git clone https://github.com/<usuario>/<repositorio>.git
-    cd <repositorio>
+    git clone https://github.com/leo2749/Parcial3PEF.git
+    cd Parcial3PEF
     python3 -m venv .venv
     source .venv/bin/activate
     python -m pip install -r requirements-dev.txt
