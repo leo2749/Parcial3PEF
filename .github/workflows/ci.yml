@@ -188,7 +188,7 @@ jobs:
       - name: Instalar lychee ${{ env.LYCHEE_VERSION }}
         run: |
           curl -sSfL "https://github.com/lycheeverse/lychee/releases/download/lychee-v${LYCHEE_VERSION}/lychee-x86_64-unknown-linux-gnu.tar.gz" \
-            | sudo tar -xz -C /usr/local/bin lychee
+            | sudo tar -xz -C /usr/local/bin --strip-components=1 lychee-x86_64-unknown-linux-gnu/lychee
           lychee --version
       - name: MkDocs (--strict) · markdownlint · lychee
         env:

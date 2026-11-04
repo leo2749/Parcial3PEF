@@ -5,9 +5,9 @@
 site_name: Motor de recomendaciones
 site_description: Documentación funcional, técnica y operativa del motor de recomendaciones eficiente
 site_author: Equipo de Programación Eficiente
-# Completar al crear el repositorio en GitHub:
-site_url: https://<usuario>.github.io/<repositorio>/
-repo_url: https://github.com/<usuario>/<repositorio>
+# Repositorio en GitHub:
+site_url: https://leo2749.github.io/Parcial3PEF/
+repo_url: https://github.com/leo2749/Parcial3PEF
 copyright: Programación Eficiente · Opción 2
 
 docs_dir: docs

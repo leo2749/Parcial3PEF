@@ -3,13 +3,13 @@
 max_retries = 3
 timeout = 20
 accept = ["200..=299", "429"]
-include_fragments = false
+include_fragments = "none"
 no_progress = true
 # Enlaces locales del servidor de desarrollo y placeholders de ejemplo.
 exclude = [
-  "^https?://127\.0\.0\.1",
-  "^https?://localhost",
-  "^https?://host\.docker\.internal",
-  "<usuario>",
+  '^https?://127\.0\.0\.1',
+  '^https?://localhost',
+  '^https?://host\.docker\.internal',
+  '<usuario>',
 ]
 exclude_path = [".venv", "site", "docs/_build", "reportes"]
