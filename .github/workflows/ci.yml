@@ -71,7 +71,7 @@ jobs:
       - run: python -m pip install -r requirements-dev.txt
       - name: Ruff · mypy · pylint · Radon/Xenon · Lizard
         run: python ci.py estatico
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reportes-estatico
@@ -118,7 +118,7 @@ jobs:
         with:
           sarif_file: reportes/gitleaks.sarif
           category: gitleaks
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reportes-seguridad
@@ -144,7 +144,7 @@ jobs:
       - run: python -m pip install -r requirements-dev.txt
       - name: pytest + coverage (umbral 90 %)
         run: python ci.py pruebas
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reportes-pruebas-py${{ matrix.python }}
@@ -166,7 +166,7 @@ jobs:
       - run: python -m pip install -r requirements-dev.txt
       - name: pip check · pip-audit
         run: python ci.py dependencias
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reportes-dependencias
@@ -194,7 +194,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # evita el rate limit de GitHub en lychee
         run: python ci.py docs --estricto
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reportes-documentacion
@@ -218,7 +218,7 @@ jobs:
       - run: python -m pip install -r requirements-dev.txt
       - name: Benchmark · profiling · memoria
         run: python ci.py rendimiento
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reportes-rendimiento
