@@ -223,7 +223,7 @@ py-spy==0.4.3
     # via -r requirements/dev.in
 pycodestyle==2.15.0
     # via flake8
-pydantic==2.14.2
+pydantic==2.14.3
     # via
     #   -c requirements/../requirements.txt
     #   fastapi
